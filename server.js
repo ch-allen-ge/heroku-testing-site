@@ -2,6 +2,7 @@ const express = require('express');
 const handlebars = require('hbs');
 const fs = require('fs');
 
+const port = process.env.PORT || 3000;
 var app = express();
 
 handlebars.registerPartials(__dirname + '/views/partials');
@@ -15,6 +16,7 @@ handlebars.registerHelper('screamIt', (text) => {
 });
 
 app.set('view engine', 'hbs');
+app.use(express.static(__dirname + '/public'));
 
 app.use((request, response, next) => {
 	var now = new Date().toString();
@@ -28,11 +30,9 @@ app.use((request, response, next) => {
 	next();
 });
 
-app.use((request, response, next) => {
-	response.render('maintenance.hbs');
-});
-
-app.use(express.static(__dirname + '/public'));
+// app.use((request, response, next) => {
+// 	response.render('maintenance.hbs');
+// });
 
 //app.use() runs in the order its written. make sure to write them in order to avoid having people accessing pages we don't want shown
 
@@ -57,6 +57,6 @@ app.get('/bad', (request, response) => {
 	});
 });
 
-app.listen(3000, () => {
-	console.log('Server is up on port 3000');
+app.listen(port, () => {
+	console.log(`Server is up on port ${port}`);
 });
